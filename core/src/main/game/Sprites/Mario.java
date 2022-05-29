@@ -3,9 +3,11 @@ package main.game.Sprites;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -23,8 +25,8 @@ public class Mario extends Sprite {
     public State previousState;
 
     private TextureRegion marioStand;
-    private Animation marioRun;
-    private Animation marioJump;
+    private Animation<TextureRegion> marioRun;
+    private Animation<TextureRegion> marioJump;
     private float stateTimer;
     private boolean runningRight;
 
@@ -51,7 +53,7 @@ public class Mario extends Sprite {
         }
 
         marioJump = new Animation<TextureRegion>(0.1f, frames);
-        frames.clear();
+        // frames.clear();
         
         marioStand = new TextureRegion(getTexture(), 0, 0, 16, 16);
 
@@ -67,8 +69,9 @@ public class Mario extends Sprite {
 
     public TextureRegion getFrame(float delta) {
         TextureRegion region;
+        currentState = getState();
 
-        switch(getState()) {
+        switch(currentState) {
             case JUMPING:
                 region = (TextureRegion) marioJump.getKeyFrame(stateTimer);
                 break;
@@ -89,12 +92,15 @@ public class Mario extends Sprite {
             region.flip(true, false);
             runningRight = true;
         }
+        
+        stateTimer = currentState == previousState ? stateTimer + delta : 0;
+        previousState = currentState;
 
         return region;
     }
 
     public State getState() {
-        if (body.getLinearVelocity().y > 0 || body.getLinearVelocity().y < 0  && previousState == State.JUMPING) {
+        if (body.getLinearVelocity().y > 0 || (body.getLinearVelocity().y < 0 && previousState == State.JUMPING)) {
             return State.JUMPING;
         } else if (body.getLinearVelocity().y < 0) {
             return State.FALLING;
@@ -115,8 +121,22 @@ public class Mario extends Sprite {
         FixtureDef fixture = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / MarioGame.PPM);
+        fixture.filter.categoryBits = MarioGame.MARIO_BIT;
+        fixture.filter.maskBits = MarioGame.DEFAULT_BIT | MarioGame.COIN_BIT | MarioGame.BRICK_BIT;
 
         fixture.shape = shape;
         body.createFixture(fixture);
+
+        // EdgeShape feetShape = new EdgeShape();
+        // feetShape.set(new Vector2(-2 / MarioGame.PPM, -6 / MarioGame.PPM), new Vector2(2 / MarioGame.PPM, -6 / MarioGame.PPM));
+        // fixture.shape = feetShape;
+        // body.createFixture(fixture);
+
+        EdgeShape headShape = new EdgeShape();
+        headShape.set(new Vector2(-2 / MarioGame.PPM, 7 / MarioGame.PPM), new Vector2(2 / MarioGame.PPM, 7 / MarioGame.PPM));
+        fixture.shape = headShape;
+        fixture.isSensor = true;
+
+        body.createFixture(fixture).setUserData("marioHead");
     }
 }

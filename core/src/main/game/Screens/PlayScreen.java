@@ -28,6 +28,7 @@ import main.game.MarioGame;
 import main.game.Scenes.Hud;
 import main.game.Sprites.Mario;
 import main.game.Tools.B2WorldCreator;
+import main.game.Tools.WorldContactListener;
 
 public class PlayScreen implements Screen {
     private MarioGame game;
@@ -66,6 +67,8 @@ public class PlayScreen implements Screen {
         new B2WorldCreator(world, map);
 
         player = new Mario(world, this);
+
+        world.setContactListener(new WorldContactListener());
     }
 
     public TextureAtlas getAtlas() {

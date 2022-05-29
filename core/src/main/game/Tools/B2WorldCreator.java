@@ -21,25 +21,25 @@ public class B2WorldCreator {
     public B2WorldCreator(World world, TiledMap map) {
 
         // create ground
-        for (MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
+        for (MapObject object : map.getLayers().get("ground").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle bounds = ((RectangleMapObject) object).getRectangle();
             new Ground(world, map, bounds);
         }   
 
         // create pipes
-        for (MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
+        for (MapObject object : map.getLayers().get("pipes").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle bounds = ((RectangleMapObject) object).getRectangle();
             new Pipe(world, map, bounds);
         }   
 
         // create bricks
-        for (MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
+        for (MapObject object : map.getLayers().get("bricks").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle bounds = ((RectangleMapObject) object).getRectangle();
             new Brick(world, map, bounds);
         }   
 
         // create coins
-        for (MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
+        for (MapObject object : map.getLayers().get("coins").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle bounds = ((RectangleMapObject) object).getRectangle();
             new Coin(world, map, bounds);
         }  
