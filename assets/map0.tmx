@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="48">
+ <tileset firstgid="1" source="tileset_gutter.tsx"/>
+ <layer id="1" name="background" width="240" height="13">
+  <data encoding="base64" compression="zlib">
+   eJztw7ENAAAMAiDT/z928YpukNBLqqqqqqqqqqqqqqqq+ngvgAwl
+  </data>
+ </layer>
+ <layer id="2" name="graphics" width="240" height="13">
+  <data encoding="base64" compression="zlib">
+   eJzt2M0OwUAUhuHT7tiVle0s2amfxIW5E9wJLs+xkMjhdJimfqbvk3xBakHizTREAADAL9uVInvdoUy7DqB7XodHfX3SnZ0+Y9cBdI8OAeRiYwbgc0bFtz8BgBSVtlvrxokNl86A3Ay0kWGkk+A878Kt3bplw0AfTLWPWUMjQR77jTWccu9rz8pXGr6+b2IegZzZ87ap3yB+v17Dqfe+9+fu3JzBnMPog6X+xle6deH/92p79foNEu/XNlzdtbd4ozl7z/xsWxpGJoo/Xg7fgbE2uwAIsxpZ
+  </data>
+ </layer>
+ <objectgroup id="6" name="ground">
+  <object id="3" x="0" y="192" width="752" height="16"/>
+  <object id="4" x="784" y="192" width="3056" height="16"/>
+  <object id="22" x="448" y="128" width="16" height="64"/>
+  <object id="23" x="432" y="144" width="16" height="48"/>
+  <object id="24" x="416" y="160" width="16" height="32"/>
+  <object id="25" x="400" y="176" width="16" height="16"/>
+  <object id="26" x="496" y="128" width="16" height="64"/>
+  <object id="27" x="512" y="144" width="16" height="48"/>
+  <object id="28" x="528" y="160" width="16" height="32"/>
+  <object id="29" x="544" y="176" width="16" height="16"/>
+  <object id="47" x="788" y="333"/>
+ </objectgroup>
+ <objectgroup id="7" name="pipes">
+  <object id="30" x="240" y="160" width="32" height="32"/>
+  <object id="31" x="304" y="128" width="32" height="64"/>
+ </objectgroup>
+ <objectgroup id="9" name="bricks">
+  <object id="32" x="848" y="144" width="16" height="16"/>
+  <object id="33" x="864" y="144" width="16" height="16"/>
+  <object id="34" x="880" y="144" width="16" height="16"/>
+  <object id="35" x="896" y="144" width="16" height="16"/>
+  <object id="36" x="1056" y="144" width="16" height="16"/>
+  <object id="37" x="1088" y="144" width="16" height="16"/>
+  <object id="38" x="1120" y="144" width="16" height="16"/>
+  <object id="39" x="1072" y="144" width="16" height="16"/>
+  <object id="40" x="1104" y="144" width="16" height="16"/>
+  <object id="41" x="1152" y="112" width="16" height="16"/>
+  <object id="42" x="1168" y="112" width="16" height="16"/>
+  <object id="43" x="1184" y="112" width="16" height="16"/>
+  <object id="44" x="1200" y="112" width="16" height="16"/>
+  <object id="45" x="1216" y="112" width="16" height="16"/>
+  <object id="46" x="1232" y="112" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="8" name="coins">
+  <object id="5" x="144" y="176" width="16" height="16"/>
+  <object id="6" x="160" y="176" width="16" height="16"/>
+  <object id="7" x="176" y="176" width="16" height="16"/>
+  <object id="8" x="1168" y="80" width="16" height="16"/>
+  <object id="9" x="1184" y="80" width="16" height="16"/>
+  <object id="10" x="1200" y="80" width="16" height="16"/>
+  <object id="11" x="1216" y="80" width="16" height="16"/>
+ </objectgroup>
+</map>
