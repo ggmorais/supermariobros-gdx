@@ -30,9 +30,9 @@ public class Mario extends Sprite {
     private float stateTimer;
     private boolean runningRight;
 
-    public Mario(World world, PlayScreen screen) {
+    public Mario(PlayScreen screen) {
         super(screen.getAtlas().findRegion("little_mario"));
-        this.world = world;
+        this.world = screen.getWorld();
 
         currentState = State.STANDING;
         previousState = State.STANDING;
@@ -122,7 +122,13 @@ public class Mario extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / MarioGame.PPM);
         fixture.filter.categoryBits = MarioGame.MARIO_BIT;
-        fixture.filter.maskBits = MarioGame.DEFAULT_BIT | MarioGame.COIN_BIT | MarioGame.BRICK_BIT;
+        fixture.filter.maskBits = (
+            MarioGame.GROUND_BIT | 
+            MarioGame.COIN_BIT | 
+            MarioGame.BRICK_BIT |
+            MarioGame.OBJECT_BIT |
+            MarioGame.ENEMY_BIT
+        );
 
         fixture.shape = shape;
         body.createFixture(fixture);

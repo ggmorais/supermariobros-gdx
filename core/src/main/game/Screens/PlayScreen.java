@@ -3,6 +3,7 @@ package main.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,7 +16,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import main.game.MarioGame;
 import main.game.Scenes.Hud;
+import main.game.Sprites.Goomba;
 import main.game.Sprites.Mario;
 import main.game.Tools.B2WorldCreator;
 import main.game.Tools.WorldContactListener;
@@ -38,13 +39,17 @@ public class PlayScreen implements Screen {
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
-    private Mario player;
     
+    private Mario player;
+    private Goomba goomba;
+
     // box2d variables
     private World world;
     private Box2DDebugRenderer b2dr;
 
     private TextureAtlas atlas;
+
+    private Music music;
 
     public PlayScreen(MarioGame game) {
         atlas = new TextureAtlas("mario_and_enemies.pack");
@@ -64,15 +69,29 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        new B2WorldCreator(world, map);
+        new B2WorldCreator(this);
 
-        player = new Mario(world, this);
+        player = new Mario(this);
+        goomba = new Goomba(this, 200, 200);
 
         world.setContactListener(new WorldContactListener());
+
+        music = MarioGame.assetManager.get("audio/music/mario_music.ogg", Music.class);
+        music.setLooping(true);
+        music.setVolume(0.4f);
+        music.play();
     }
 
     public TextureAtlas getAtlas() {
         return atlas;
+    }
+
+    public TiledMap getMap() {
+        return map;
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public void update(float delta) {
@@ -82,6 +101,7 @@ public class PlayScreen implements Screen {
         camera.position.x = player.body.getPosition().x;
         camera.update();
         mapRenderer.setView(camera);
+        hud.update(delta);
     }
 
     public void handleInput(float delta) {
