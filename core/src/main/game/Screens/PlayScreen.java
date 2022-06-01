@@ -6,21 +6,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -45,11 +37,16 @@ public class PlayScreen implements Screen {
 
     // box2d variables
     private World world;
+
+    // debugger
     private Box2DDebugRenderer b2dr;
+    private boolean isB2drEnabled = true;
 
     private TextureAtlas atlas;
 
     private Music music;
+
+    private float musicVolume = 0.2f;
 
     public PlayScreen(MarioGame game) {
         atlas = new TextureAtlas("mario_and_enemies.pack");
@@ -72,13 +69,13 @@ public class PlayScreen implements Screen {
         new B2WorldCreator(this);
 
         player = new Mario(this);
-        goomba = new Goomba(this, 200, 200);
+        goomba = new Goomba(this, 64 / MarioGame.PPM, 64 / MarioGame.PPM);
 
         world.setContactListener(new WorldContactListener());
 
         music = MarioGame.assetManager.get("audio/music/mario_music.ogg", Music.class);
         music.setLooping(true);
-        music.setVolume(0.4f);
+        music.setVolume(musicVolume);
         music.play();
     }
 
@@ -98,6 +95,7 @@ public class PlayScreen implements Screen {
         handleInput(delta);
         world.step(1 / 60f, 6, 2);
         player.update(delta);
+        goomba.update(delta);
         camera.position.x = player.body.getPosition().x;
         camera.update();
         mapRenderer.setView(camera);
@@ -105,7 +103,7 @@ public class PlayScreen implements Screen {
     }
 
     public void handleInput(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && player.body.getLinearVelocity().y == 0) {
             player.body.applyLinearImpulse(new Vector2(0, 4f), player.body.getWorldCenter(), true);
         }
 
@@ -115,6 +113,10 @@ public class PlayScreen implements Screen {
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.body.getLinearVelocity().x >= -2) {
             player.body.applyLinearImpulse(new Vector2(-0.1f, 0), player.body.getWorldCenter(), true);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+            isB2drEnabled = !isB2drEnabled;
         }
     }
 
@@ -131,11 +133,14 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         mapRenderer.render();
-        b2dr.render(world, camera.combined);
+
+        if (isB2drEnabled)
+            b2dr.render(world, camera.combined);
         
         game.sb.setProjectionMatrix(camera.combined);
         game.sb.begin();
         player.draw(game.sb);
+        goomba.draw(game.sb);
         game.sb.end();
 
         game.sb.setProjectionMatrix(hud.stage.getCamera().combined);

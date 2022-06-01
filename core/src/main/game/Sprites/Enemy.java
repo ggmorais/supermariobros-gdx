@@ -17,6 +17,7 @@ abstract public class Enemy extends Sprite {
         setPosition(x, y);
         defineEnemy();
     }
-
+    
+    public abstract void onHeadHit();
     protected abstract void defineEnemy();
 }

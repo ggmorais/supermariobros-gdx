@@ -127,7 +127,8 @@ public class Mario extends Sprite {
             MarioGame.COIN_BIT | 
             MarioGame.BRICK_BIT |
             MarioGame.OBJECT_BIT |
-            MarioGame.ENEMY_BIT
+            MarioGame.ENEMY_BIT |
+            MarioGame.ENEMY_HEAD_BIT
         );
 
         fixture.shape = shape;
