@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="52">
+<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="54">
  <tileset firstgid="1" source="tileset_gutter.tsx"/>
  <layer id="1" name="background" width="240" height="13">
   <data encoding="base64" compression="zlib">
@@ -13,7 +13,7 @@
  </layer>
  <layer id="2" name="graphics" width="240" height="13">
   <data encoding="base64" compression="zlib">
-   eJzt2EEKwjAURdGXzOoOOs2wjlVwn+pOrMvr7zTyU60GbbgHHlorgoNLoBIAAPhnlyhdbbe47j6A+rwO73Y92h5On0v3AdRHhwBacc4GAADqis6ALehf/GzWBWkXyr+XnPcAfmuwdveFfpOe+63R8Jqzcv5en70CLcvP21K/SX6/nMPAdx2sw6PtFPxnr3mvXr9Jy/3SMPC+sOG18B8Y+2QT7wgTrw==
+   eJzt2EEKwjAQheFJdnqDbmepaxW8p3oT9XhOEUEik8RqwMb/g0ebNCl08QhUBAAA/LJDFDlaTnHacwDteT082/hiuTr9LD0H0B49BNCLfRIAANBWdALMwVA5N1oEkWXIv0+d+9r976wDUG9lnVpneqXy2t/ncWl/7bopZ+W4bkiuQM/SczDXKxW/v4+5b/UX+Hcb68fWsgv+v9e0R16vVMr91cz+FP0F7sKM08M3EPJJbo93FeM=
   </data>
  </layer>
  <objectgroup id="6" name="ground">
@@ -32,6 +32,8 @@
  <objectgroup id="7" name="pipes">
   <object id="30" x="240" y="160" width="32" height="32"/>
   <object id="31" x="304" y="128" width="32" height="64"/>
+  <object id="52" x="560" y="128" width="32" height="64"/>
+  <object id="53" x="720" y="128" width="32" height="64"/>
  </objectgroup>
  <objectgroup id="9" name="bricks">
   <object id="32" x="848" y="144" width="16" height="16"/>

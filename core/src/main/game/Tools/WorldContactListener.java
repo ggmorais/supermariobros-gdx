@@ -28,27 +28,27 @@ public class WorldContactListener implements ContactListener {
             }
         }
 
-        int cDef = fixA.getFilterData().categoryBits | fixA.getFilterData().categoryBits;
+        int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
         switch (cDef) {
             case MarioGame.ENEMY_HEAD_BIT | MarioGame.MARIO_BIT:
+                Gdx.app.log("switch enemy head hit", "");
                 if (fixA.getFilterData().categoryBits == MarioGame.ENEMY_HEAD_BIT)
                     ((Enemy) fixA.getUserData()).onHeadHit();
-                else if (fixB.getFilterData().categoryBits == MarioGame.ENEMY_HEAD_BIT)
+                else
                     ((Enemy) fixB.getUserData()).onHeadHit();
-        }
+                break;
+            case MarioGame.ENEMY_BIT | MarioGame.OBJECT_BIT:
+                if (fixA.getFilterData().categoryBits == MarioGame.ENEMY_BIT)
+                    ((Enemy) fixA.getUserData()).reverseVelocity(true, false);
+                else
+                    ((Enemy) fixB.getUserData()).reverseVelocity(true, false);
+                break;
+            case MarioGame.MARIO_BIT | MarioGame.ENEMY_BIT:
+                Gdx.app.log("Mario", "died");
 
-        // if (fixA.getUserData() == "goombaHead" || fixB.getUserData() == "goombaHead") {
-        //     Fixture head = fixA.getUserData() == "goombaHead" ? fixA : fixB;
-        //     Fixture object = head == fixA ? fixB : fixA;
-        //     Gdx.app.log("goombaHead", "");
-            
-        //     ((Enemy) object.getUserData()).onHeadHit();
-        //     // if (object.getUserData() != null && Enemy.class.isAssignableFrom(object.getUserData().getClass())) {
-        //     //     Gdx.app.log("goombaHead2", "");
-        //     //     ((Enemy) object.getUserData()).onHeadHit();
-        //     // }
-        // }
+        }       
+
     }
 
     @Override

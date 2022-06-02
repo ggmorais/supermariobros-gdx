@@ -2,6 +2,7 @@ package main.game.Sprites;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -20,6 +21,8 @@ public class Goomba extends Enemy {
     private float stateTime;
     private Animation<TextureRegion> walkAnimation;
     private Array<TextureRegion> frames;
+    private boolean setToDestroy = false;
+    private boolean destroyed = false;
 
     public Goomba(PlayScreen screen, float x, float y) {
         super(screen, x, y);
@@ -35,13 +38,29 @@ public class Goomba extends Enemy {
 
     public void update(float delta) {
         stateTime += delta;
-        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-        setRegion(walkAnimation.getKeyFrame(stateTime, true));
+        if (setToDestroy && !destroyed) {
+            world.destroyBody(body);
+            destroyed = true;
+            setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), 32, 0, 16, 16));
+            stateTime = 0;
+        } else if (!destroyed) {
+            body.setLinearVelocity(new Vector2(body.getLinearVelocity().y != 0 ? 0 : velocity.x, body.getLinearVelocity().y));
+            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+            setRegion(walkAnimation.getKeyFrame(stateTime, true));
+        }
     }
 
     @Override
     public void onHeadHit() {
         Gdx.app.log("Goomba head hit!", "");
+        setToDestroy = true;
+    }
+
+    @Override
+    public void draw(Batch batch) {
+        if (!destroyed || stateTime < 1) {
+            super.draw(batch);
+        }
     }
 
     @Override
@@ -67,7 +86,7 @@ public class Goomba extends Enemy {
         );
 
         fixture.shape = shape;
-        body.createFixture(fixture);
+        body.createFixture(fixture).setUserData(this);;
         
         PolygonShape headShape = new PolygonShape();
         Vector2[] headVertice = { 
@@ -82,13 +101,7 @@ public class Goomba extends Enemy {
         fixture.restitution = 0.5f;
         fixture.filter.categoryBits = MarioGame.ENEMY_HEAD_BIT;
 
-        body.createFixture(fixture).setUserData("goombaHead");;
-
-        // headShape.set(new Vector2(-2 / MarioGame.PPM, 7 / MarioGame.PPM), new Vector2(2 / MarioGame.PPM, 7 / MarioGame.PPM));
-        // fixture.shape = headShape;
-        // fixture.isSensor = true;
-
-        // body.createFixture(fixture).setUserData("goombaHead");
+        body.createFixture(fixture).setUserData(this);;
     }
     
 }

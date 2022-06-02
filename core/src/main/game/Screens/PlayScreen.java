@@ -69,7 +69,7 @@ public class PlayScreen implements Screen {
         new B2WorldCreator(this);
 
         player = new Mario(this);
-        goomba = new Goomba(this, 64 / MarioGame.PPM, 64 / MarioGame.PPM);
+        goomba = new Goomba(this, 600 / MarioGame.PPM, 600 / MarioGame.PPM);
 
         world.setContactListener(new WorldContactListener());
 
