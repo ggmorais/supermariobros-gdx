@@ -1,4 +1,4 @@
-package main.game.Sprites;
+package main.game.Sprites.Enemies;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -21,8 +21,10 @@ abstract public class Enemy extends Sprite {
         defineEnemy();
 
         velocity = new Vector2(-1, -2);
+        body.setActive(false);
     }
     
+    public abstract void update(float delta);
     public abstract void onHeadHit();
     protected abstract void defineEnemy();
 

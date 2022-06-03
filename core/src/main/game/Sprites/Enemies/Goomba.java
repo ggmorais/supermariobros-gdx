@@ -1,4 +1,4 @@
-package main.game.Sprites;
+package main.game.Sprites.Enemies;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;

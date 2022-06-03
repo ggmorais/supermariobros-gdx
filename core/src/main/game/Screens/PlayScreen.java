@@ -1,5 +1,8 @@
 package main.game.Screens;
 
+import java.util.PriorityQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -13,13 +16,18 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import main.game.MarioGame;
 import main.game.Scenes.Hud;
-import main.game.Sprites.Goomba;
 import main.game.Sprites.Mario;
+import main.game.Sprites.Enemies.Enemy;
+import main.game.Sprites.Enemies.Goomba;
+import main.game.Sprites.Items.Item;
+import main.game.Sprites.Items.ItemDef;
+import main.game.Sprites.Items.Mushroom;
 import main.game.Tools.B2WorldCreator;
 import main.game.Tools.WorldContactListener;
 
@@ -34,6 +42,7 @@ public class PlayScreen implements Screen {
     
     private Mario player;
     private Goomba goomba;
+    private B2WorldCreator worldCreator;
 
     // box2d variables
     private World world;
@@ -47,6 +56,9 @@ public class PlayScreen implements Screen {
     private Music music;
 
     private float musicVolume = 0.2f;
+
+    private Array<Item> items;
+    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     public PlayScreen(MarioGame game) {
         atlas = new TextureAtlas("mario_and_enemies.pack");
@@ -65,22 +77,37 @@ public class PlayScreen implements Screen {
 
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
-
-        new B2WorldCreator(this);
-
+        worldCreator = new B2WorldCreator(this);
+        
         player = new Mario(this);
-        goomba = new Goomba(this, 600 / MarioGame.PPM, 600 / MarioGame.PPM);
+        // goomba = new Goomba(this, 600 / MarioGame.PPM, 600 / MarioGame.PPM);
 
         world.setContactListener(new WorldContactListener());
 
-        music = MarioGame.assetManager.get("audio/music/mario_music.ogg", Music.class);
-        music.setLooping(true);
-        music.setVolume(musicVolume);
-        music.play();
+        items = new Array<Item>();
+        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
+
+        // music = MarioGame.assetManager.get("audio/music/mario_music.ogg", Music.class);
+        // music.setLooping(true);
+        // music.setVolume(musicVolume);
+        // music.play();
+    }
+
+    public void spawnItem(ItemDef def) {
+        itemsToSpawn.add(def);
     }
 
     public TextureAtlas getAtlas() {
         return atlas;
+    }
+    
+    public void handleSpawningItems() {
+        if (!itemsToSpawn.isEmpty()) {
+            ItemDef def = itemsToSpawn.poll();
+            if (def.type == Mushroom.class) {
+                items.add(new Mushroom(this, def.position.x, def.position.y));
+            }
+        }
     }
 
     public TiledMap getMap() {
@@ -93,9 +120,22 @@ public class PlayScreen implements Screen {
 
     public void update(float delta) {
         handleInput(delta);
+        handleSpawningItems();
+
         world.step(1 / 60f, 6, 2);
         player.update(delta);
-        goomba.update(delta);
+        
+        for (Enemy enemy : worldCreator.getGoombas()) {
+            enemy.update(delta);
+            if (enemy.getX() < player.getX() + 224 / MarioGame.PPM) {
+                enemy.body.setActive(true);
+            }
+        }
+
+        for (Item item : items) {
+            item.update(delta);
+        }
+
         camera.position.x = player.body.getPosition().x;
         camera.update();
         mapRenderer.setView(camera);
@@ -139,8 +179,17 @@ public class PlayScreen implements Screen {
         
         game.sb.setProjectionMatrix(camera.combined);
         game.sb.begin();
+        
         player.draw(game.sb);
-        goomba.draw(game.sb);
+
+        for (Enemy enemy : worldCreator.getGoombas()) {
+            enemy.draw(game.sb);
+        }
+
+        for (Item item : items) {
+            item.draw(game.sb);
+        }
+
         game.sb.end();
 
         game.sb.setProjectionMatrix(hud.stage.getCamera().combined);

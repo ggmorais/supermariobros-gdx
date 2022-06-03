@@ -1,4 +1,4 @@
-package main.game.Sprites;
+package main.game.Sprites.TileObjects;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
@@ -23,8 +23,10 @@ abstract public class InteractiveTileObject {
     protected Rectangle bounds;
     protected Body body;
     protected Fixture fixture;
+    protected PlayScreen screen;
 
     public InteractiveTileObject(PlayScreen screen, Rectangle bounds) {
+        this.screen = screen;
         this.world = screen.getWorld();
         this.map = screen.getMap();
         this.bounds = bounds;

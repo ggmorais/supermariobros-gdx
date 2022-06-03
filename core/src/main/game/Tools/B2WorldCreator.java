@@ -10,15 +10,19 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.utils.Array;
 
 import main.game.MarioGame;
 import main.game.Screens.PlayScreen;
-import main.game.Sprites.Brick;
-import main.game.Sprites.CoinBrick;
-import main.game.Sprites.Ground;
-import main.game.Sprites.Pipe;
+import main.game.Sprites.Enemies.Goomba;
+import main.game.Sprites.TileObjects.Brick;
+import main.game.Sprites.TileObjects.CoinBrick;
+import main.game.Sprites.TileObjects.Ground;
+import main.game.Sprites.TileObjects.Pipe;
 
 public class B2WorldCreator {
+    private Array<Goomba> goombas;
+
     public B2WorldCreator(PlayScreen screen) {
         World world = screen.getWorld();
         TiledMap map = screen.getMap();
@@ -45,7 +49,19 @@ public class B2WorldCreator {
         for (MapObject object : map.getLayers().get("coins").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle bounds = ((RectangleMapObject) object).getRectangle();
             new CoinBrick(screen, bounds);
-        }  
+        }
 
+        // create goombas
+        goombas = new Array<Goomba>();
+
+        for (MapObject object : map.getLayers().get("goombas").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle bounds = ((RectangleMapObject) object).getRectangle();
+            goombas.add(new Goomba(screen, bounds.getX() / MarioGame.PPM, bounds.getY() / MarioGame.PPM));
+        }
+
+    }
+
+    public Array<Goomba> getGoombas() {
+        return goombas;
     }
 }

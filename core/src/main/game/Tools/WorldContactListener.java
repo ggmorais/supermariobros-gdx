@@ -8,9 +8,11 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 import main.game.MarioGame;
-import main.game.Sprites.Enemy;
-import main.game.Sprites.Goomba;
-import main.game.Sprites.InteractiveTileObject;
+import main.game.Sprites.Mario;
+import main.game.Sprites.Enemies.Enemy;
+import main.game.Sprites.Enemies.Goomba;
+import main.game.Sprites.TileObjects.InteractiveTileObject;
+import main.game.Sprites.Items.Item;
 
 public class WorldContactListener implements ContactListener {
 
@@ -38,12 +40,40 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Enemy) fixB.getUserData()).onHeadHit();
                 break;
+            
+            case MarioGame.ENEMY_BIT | MarioGame.BRICK_BIT:
+                if (fixA.getFilterData().categoryBits == MarioGame.ENEMY_BIT)
+                    ((Enemy) fixA.getUserData()).reverseVelocity(true, false);
+                else
+                    ((Enemy) fixB.getUserData()).reverseVelocity(true, false);
+                break;
+            
             case MarioGame.ENEMY_BIT | MarioGame.OBJECT_BIT:
                 if (fixA.getFilterData().categoryBits == MarioGame.ENEMY_BIT)
                     ((Enemy) fixA.getUserData()).reverseVelocity(true, false);
                 else
                     ((Enemy) fixB.getUserData()).reverseVelocity(true, false);
                 break;
+            
+            case MarioGame.ENEMY_BIT | MarioGame.ENEMY_BIT:
+                ((Enemy) fixA.getUserData()).reverseVelocity(true, false);
+                ((Enemy) fixB.getUserData()).reverseVelocity(true, false);
+                break;
+
+            case MarioGame.ITEM_BIT | MarioGame.OBJECT_BIT:
+                if (fixA.getFilterData().categoryBits == MarioGame.ITEM_BIT)
+                    ((Item) fixA.getUserData()).reverseVelocity(true, false);
+                else
+                    ((Item) fixB.getUserData()).reverseVelocity(true, false);
+                break;
+
+            case MarioGame.ITEM_BIT | MarioGame.MARIO_BIT:
+                if (fixA.getFilterData().categoryBits == MarioGame.ITEM_BIT)
+                    ((Item) fixA.getUserData()).useItem((Mario) fixB.getUserData());
+                else if (!(fixA.getUserData() instanceof String))
+                    ((Item) fixB.getUserData()).useItem((Mario) fixA.getUserData());
+                break;
+            
             case MarioGame.MARIO_BIT | MarioGame.ENEMY_BIT:
                 Gdx.app.log("Mario", "died");
 

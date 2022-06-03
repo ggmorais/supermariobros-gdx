@@ -1,4 +1,4 @@
-package main.game.Sprites;
+package main.game.Sprites.TileObjects;
 
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
