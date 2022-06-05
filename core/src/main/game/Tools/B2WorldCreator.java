@@ -29,26 +29,22 @@ public class B2WorldCreator {
 
         // create ground
         for (MapObject object : map.getLayers().get("ground").getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle bounds = ((RectangleMapObject) object).getRectangle();
-            new Ground(screen, bounds);
+            new Ground(screen, object);
         }   
 
         // create pipes
         for (MapObject object : map.getLayers().get("pipes").getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle bounds = ((RectangleMapObject) object).getRectangle();
-            new Pipe(screen, bounds);
+            new Pipe(screen, object);
         }   
 
         // create bricks
         for (MapObject object : map.getLayers().get("bricks").getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle bounds = ((RectangleMapObject) object).getRectangle();
-            new Brick(screen, bounds);
+            new Brick(screen, object);
         }   
 
         // create coins
         for (MapObject object : map.getLayers().get("coins").getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle bounds = ((RectangleMapObject) object).getRectangle();
-            new CoinBrick(screen, bounds);
+            new CoinBrick(screen, object);
         }
 
         // create goombas

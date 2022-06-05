@@ -28,6 +28,7 @@ import main.game.Sprites.Enemies.Goomba;
 import main.game.Sprites.Items.Item;
 import main.game.Sprites.Items.ItemDef;
 import main.game.Sprites.Items.Mushroom;
+import main.game.Sprites.Mario.State;
 import main.game.Tools.B2WorldCreator;
 import main.game.Tools.WorldContactListener;
 
@@ -80,17 +81,16 @@ public class PlayScreen implements Screen {
         worldCreator = new B2WorldCreator(this);
         
         player = new Mario(this);
-        // goomba = new Goomba(this, 600 / MarioGame.PPM, 600 / MarioGame.PPM);
 
         world.setContactListener(new WorldContactListener());
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
 
-        // music = MarioGame.assetManager.get("audio/music/mario_music.ogg", Music.class);
-        // music.setLooping(true);
-        // music.setVolume(musicVolume);
-        // music.play();
+        music = MarioGame.assetManager.get("audio/music/mario_music.ogg", Music.class);
+        music.setLooping(true);
+        music.setVolume(musicVolume);
+        music.play();
     }
 
     public void spawnItem(ItemDef def) {
@@ -127,7 +127,7 @@ public class PlayScreen implements Screen {
         
         for (Enemy enemy : worldCreator.getGoombas()) {
             enemy.update(delta);
-            if (enemy.getX() < player.getX() + 224 / MarioGame.PPM) {
+            if (enemy.getX() < player.getX() + 512 / MarioGame.PPM) {
                 enemy.body.setActive(true);
             }
         }
@@ -136,13 +136,26 @@ public class PlayScreen implements Screen {
             item.update(delta);
         }
 
-        camera.position.x = player.body.getPosition().x;
+        Gdx.app.log("Player pos", String.format("%f", player.body.getPosition().x));
+        Gdx.app.log("Player pos 2", String.format("%f", (player.body.getPosition().x / MarioGame.PPM) * 100));
+        Gdx.app.log("World size", String.format("%f", map.getProperties().get("width", Integer.class) - camera.viewportWidth));
+
+        if (!player.getMarioIsDead() 
+            && player.body.getPosition().x >= (MarioGame.V_WIDTH / 2 - player.getWidth() / 2) / MarioGame.PPM
+            // && player.body.getPosition().x <= mapRenderer.getViewBounds().width - (MarioGame.V_WIDTH / 2 - player.getWidth() / 2)
+            ) {
+                camera.position.x = player.body.getPosition().x;
+        }
+
         camera.update();
         mapRenderer.setView(camera);
         hud.update(delta);
     }
 
     public void handleInput(float delta) {
+        if (player.getMarioIsDead()) 
+            return;
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && player.body.getLinearVelocity().y == 0) {
             player.body.applyLinearImpulse(new Vector2(0, 4f), player.body.getWorldCenter(), true);
         }

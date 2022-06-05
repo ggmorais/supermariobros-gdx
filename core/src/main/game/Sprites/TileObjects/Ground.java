@@ -1,20 +1,19 @@
 package main.game.Sprites.TileObjects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.maps.MapObject;
 
 import main.game.Screens.PlayScreen;
+import main.game.Sprites.Mario;
 
 public class Ground extends InteractiveTileObject {
-    public Ground(PlayScreen screen, Rectangle bounds)  {
-        super(screen, bounds);
+    public Ground(PlayScreen screen, MapObject object)  {
+        super(screen, object);
         fixture.setUserData(this);
     }
 
     @Override
-    public void onHeadHit() {
+    public void onHeadHit(Mario mario) {
         Gdx.app.log("Contact:", "Ground");
     }
 }

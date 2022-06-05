@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="67">
+<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="69">
  <tileset firstgid="1" source="tileset_gutter.tsx"/>
  <layer id="1" name="background" width="240" height="13">
   <data encoding="base64" compression="zlib">
@@ -13,7 +13,7 @@
  </layer>
  <layer id="2" name="graphics" width="240" height="13">
   <data encoding="base64" compression="zlib">
-   eJzt2U0OgjAQhuGBnd6A7Sx1rSbeU72JejzHRBOcUjvxh1R8n+QLQmkNiy8EEAEAADXS23bXiuwthzYdy40DGJfv4b2jR9s/Wc6Z/g6NAxiX72FTCADUausCAAC+q80E+AVd8Jg3swfj+cDDsWZ+P5sTXRvAZyysX0vXMZW0v1qYE12775V75fW8zm2BKYrc/3zHVPL91cyc6NoAHq2sH2vLpknfvUb60z9HpdxfDa4b/X/gH5S+7dacKVwDIe/kAmPJFnM=
+   eJzt2U0KwjAQhuExO71Bt7PUtQreU3sT9XiOUKGmSTP4U2J9H/hINU3ExUcoFQEAADXSbjwGkZOlDcO53DyAacU9fHT0bJ8vlmumv6l5ANOKe7goBABqdYgCAAC+K2QC/IKmG0PiuzFLezBeJR6ONXM9tsa7N4DPWFu/NlHHVIb91cIa7959r5yV9/uaaATmyHP+xR1TyfdXM2u8ewN4trV+7Cz7RE88/enfo1Lurzr39f4+8A9K73Zrzhz+AyHv5AaK3hXH
   </data>
  </layer>
  <objectgroup id="6" name="ground">
@@ -51,14 +51,17 @@
   <object id="46" x="1232" y="112" width="16" height="16"/>
   <object id="60" x="144" y="32" width="16" height="32"/>
   <object id="61" x="256" y="32" width="16" height="32"/>
+  <object id="67" x="160" y="128" width="16" height="16"/>
+  <object id="68" x="106.5" y="260.5"/>
  </objectgroup>
  <objectgroup id="8" name="coins">
-  <object id="5" x="144" y="176" width="16" height="16"/>
-  <object id="6" x="160" y="176" width="16" height="16"/>
-  <object id="7" x="176" y="176" width="16" height="16"/>
   <object id="48" x="1072" y="144" width="16" height="16"/>
   <object id="49" x="1104" y="144" width="16" height="16"/>
-  <object id="50" x="128" y="128" width="16" height="16"/>
+  <object id="50" x="128" y="128" width="16" height="16">
+   <properties>
+    <property name="mushroom" value=""/>
+   </properties>
+  </object>
   <object id="51" x="208" y="128" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="11" name="goombas">

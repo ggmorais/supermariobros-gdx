@@ -1,22 +1,21 @@
 package main.game.Sprites.TileObjects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.maps.MapObject;
 
 import main.game.MarioGame;
 import main.game.Screens.PlayScreen;
+import main.game.Sprites.Mario;
 
 public class Pipe extends InteractiveTileObject {
-    public Pipe(PlayScreen screen, Rectangle bounds)  {
-        super(screen, bounds);
+    public Pipe(PlayScreen screen, MapObject object)  {
+        super(screen, object);
         fixture.setUserData(this);
         setCategoryFilter(MarioGame.OBJECT_BIT);
     }
 
     @Override
-    public void onHeadHit() {
+    public void onHeadHit(Mario mario) {
         Gdx.app.log("Contact:", "Pipe");
     }
 }

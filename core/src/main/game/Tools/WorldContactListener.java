@@ -20,19 +20,17 @@ public class WorldContactListener implements ContactListener {
     public void beginContact(Contact contact) {
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
-        
-        if (fixA.getUserData() == "marioHead" || fixB.getUserData() == "marioHead") {
-            Fixture head = fixA.getUserData() == "marioHead" ? fixA : fixB;
-            Fixture object = head == fixA ? fixB : fixA;
-            
-            if (object.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(object.getUserData().getClass())) {
-                ((InteractiveTileObject) object.getUserData()).onHeadHit();
-            }
-        }
 
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
         switch (cDef) {
+            case MarioGame.MARIO_HEAD_BIT | MarioGame.BRICK_BIT:
+            case MarioGame.MARIO_HEAD_BIT | MarioGame.COIN_BIT:
+                if (fixA.getFilterData().categoryBits == MarioGame.MARIO_HEAD_BIT)
+                    ((InteractiveTileObject) fixB.getUserData()).onHeadHit((Mario) fixA.getUserData());
+                else
+                    ((InteractiveTileObject) fixA.getUserData()).onHeadHit((Mario) fixB.getUserData());
+                break;
             case MarioGame.ENEMY_HEAD_BIT | MarioGame.MARIO_BIT:
                 Gdx.app.log("switch enemy head hit", "");
                 if (fixA.getFilterData().categoryBits == MarioGame.ENEMY_HEAD_BIT)
@@ -76,9 +74,12 @@ public class WorldContactListener implements ContactListener {
             
             case MarioGame.MARIO_BIT | MarioGame.ENEMY_BIT:
                 Gdx.app.log("Mario", "died");
-
+                if (fixA.getFilterData().categoryBits == MarioGame.MARIO_BIT)
+                    ((Mario) fixA.getUserData()).hit();
+                else
+                    ((Mario) fixB.getUserData()).hit();
+                break;
         }       
-
     }
 
     @Override
